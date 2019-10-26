@@ -45,3 +45,20 @@ app.post('/calculate', function(req, res){
 });
 
 app.listen(3010);
+console.log('app listening on 3010' );
+console.log('inside caluclate request ');
+console.log("Req body : {exp:'98+54'}")
+console.log("caluclate result : '152' ");
+console.log("Req body:{exp:'98*231'}");
+console.log("caluclate result : '22638'");
+console.log("Req body:{exp:'65-42'}");
+console.log("caluclate result : '23'");
+console.log("Req body:{exp:'98/2'}");
+
+
+
+
+
+
+
+
