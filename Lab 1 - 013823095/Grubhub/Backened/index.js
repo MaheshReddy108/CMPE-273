@@ -593,7 +593,7 @@ app.post('/search', function (req, res) {
 
 //Get Property Details
 
-app.post('/property-details', function (req, res) {
+app.post('/Restauant-details', function (req, res) {
 
     console.log('Inside Restaurant Details Method POST!');
     console.log('Request Body: ', req.body);
