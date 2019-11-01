@@ -6,25 +6,33 @@ mongoose.connect('mongodb+srv://mahesh:Mahesh1896@273-nu1yk.mongodb.net/test?ret
 var Userdetails = mongoose.model('Userdetails', {
 
     'Email' : {
-        type: String
+        type: String,
+        required: true
     },
     'Password' : {
-        type: String
+        type: String,
+        required: true
     },
     'FirstName' : {
-        type: String
+        type: String,
+        required: true
     },
     'LastName' : {
-        type : String
+        type : String,
+        required: true
     },
     'ProfileImage' : {
-        type : String
+        type : String,
+        required: true
     },
-   
+    'PhoneNumber' : {
+        type : String,
+        required: true
+    },
     'Address' : {
         type : String
     },
-    'Accounttype' : {
+    'AccountType' : {
         type : Number
     },
     'RestaurantDetails' : {
@@ -36,36 +44,31 @@ var Userdetails = mongoose.model('Userdetails', {
 
 
 var RestaurantDetails = mongoose.model('RestaurantDetails', {    
-    'RestaurantId' : String,
+    'ResId' : String,
+    'ResName' :String,
     'Cuisine' : String,
     'Description' : String,
     'Address' :String,
-    'City' : String,
-    'State' : String,
-    'ZipCode' : String,
-    'PropertyType' :String,
-    'Bedrooms' : Number,
-    'Accomodates' :Number,
-    'Bathrooms': Number,
-    'Photos' : String,
-    'Currency' : String,
-    'Baserate' : String,
-    'AvailabilityStartDate': Date,
-    'AvailabilityEndDate': Date,
-    'MinStay' : Number,
+    'ResZipcode' : String,
+    'Locations' :String,
+    'ResImage' :String,
     'Ownername' : String,
-    'Messages': Array,
-    'OwnerId' : String
+    'OwnerId' : String,
+    'ResMenu' : {
+        type: Array
+      }
 });
 
 var OrderDetails = mongoose.model('OrderDetails', {
-    'RestaurantId' : String,
-    'Bookingstartdate' : Date,
-    'Bookingenddate' : Date,
-    'Guests': Number,
+    'ResId' : String,
+    'ResName' : String,
+    'ItemName' : String,
+    'ItemQuantity' : Number,
+    'ItemPrice': Number,
     'TotalCost' : String,
     'Ownername' : String,
-    'Travelername' : String,
+    'Buyername' : String,
+    'OrderStatus' : String,
     'BuyerId' : Number
 });
 
