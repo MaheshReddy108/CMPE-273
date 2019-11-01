@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 //mongoose.connect('mongodb://localhost:27017/HomeAway');
+mongoose.connect('mongodb+srv://mahesh:Mahesh1896@273-nu1yk.mongodb.net/test?retryWrites=true&w=majority');
 
-mongoose.connect('mongodb://dbuser:aearivoli94@ds235807.mlab.com:35807/homeaway');
 var Userdetails = mongoose.model('Userdetails', {
 
-    'Username' : {
+    'Email' : {
         type: String
     },
     'Password' : {
@@ -17,56 +17,29 @@ var Userdetails = mongoose.model('Userdetails', {
     'LastName' : {
         type : String
     },
-    'Email' : {
-        type : String
-    },
-    'Aboutme' :  {
-        type : String
-    },
-    'Country' : {
-        type : String
-    },
-    'City' : { 
-        type : String
-    },
-    'Gender' : {
-        type : String
-    },
-    'Hometown' : {
-        type : String
-    },
-    'School' : {
-        type : String
-    },
-    'Company' : {
-        type : String
-    },
-    'Language' : {
-        type : String
-    },
     'ProfileImage' : {
         type : String
     },
-    'PhoneNumber' : {
+   
+    'Address' : {
         type : String
     },
     'Accounttype' : {
         type : Number
     },
-    'PropertyDetails' : {
+    'RestaurantDetails' : {
         type: Array
     },
-    'Tripdetails' : Array,
-    'ProfileId' : Number
+    'Orderdetails' : Array,
+    'ProfileId' : String
 });
 
 
-var PropertyDetails = mongoose.model('PropertyDetails', {    
-    'PropertyId' : String,
-    'Headline' : String,
+var RestaurantDetails = mongoose.model('RestaurantDetails', {    
+    'RestaurantId' : String,
+    'Cuisine' : String,
     'Description' : String,
-    'Country' : String,
-    'StreetAddress' :String,
+    'Address' :String,
     'City' : String,
     'State' : String,
     'ZipCode' : String,
@@ -80,23 +53,33 @@ var PropertyDetails = mongoose.model('PropertyDetails', {
     'AvailabilityStartDate': Date,
     'AvailabilityEndDate': Date,
     'MinStay' : Number,
-    'Ownername' : String
-
+    'Ownername' : String,
+    'Messages': Array,
+    'OwnerId' : String
 });
 
-var BookingDetails = mongoose.model('BookingDetails', {
-    'PropertyId' : String,
+var OrderDetails = mongoose.model('OrderDetails', {
+    'RestaurantId' : String,
     'Bookingstartdate' : Date,
     'Bookingenddate' : Date,
     'Guests': Number,
     'TotalCost' : String,
     'Ownername' : String,
     'Travelername' : String,
-    'TravelerId' : Number
+    'BuyerId' : Number
+});
+
+var MessageCollection = mongoose.model('MessageCollection',{
+    'RestaurantId' : String,
+    'BuyerId' : String,
+    'OwnerId' : String,
+    'Message' : JSON,
+    'MessageId': String
 });
 
 module.exports = {
     Userdetails,
-    PropertyDetails,
-    BookingDetails
+    RestaurantDetails,
+    OrderDetails,
+    MessageCollection
 };
