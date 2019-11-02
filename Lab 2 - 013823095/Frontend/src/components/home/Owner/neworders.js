@@ -3,7 +3,11 @@ import React, { Component } from "react";
 import axios from 'axios'
 import ItemDetails from "./itemdetails";
 import rootUrl from "../../config/settings";
-import swal from 'sweetalert'
+import swal from 'sweetalert' 
+import {oneworder} from '../../../actions';
+import { reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+
 
 class NewOrders extends Component {
     constructor(props) {
@@ -20,8 +24,7 @@ class NewOrders extends Component {
         const data = {
             userEmail: localStorage.getItem('userEmail')
         }
-        axios.post(rootUrl + "/orders/all-orders", data)
-            .then(response => {
+        this.props.oneworder(data, response => {
                 if (response.status === 200) {
                     console.log(response.data)
                     this.setState({
@@ -118,4 +121,21 @@ class NewOrders extends Component {
     }
 }
 
-export default NewOrders;
+
+
+function mapStateToProps (state) {
+    return {
+      user: state.user
+    }
+  }
+
+
+  export default connect(
+    mapStateToProps,
+    { oneworder }
+  )(
+    reduxForm({
+      form: 'streamSearch'
+    })(NewOrders)
+  )
+

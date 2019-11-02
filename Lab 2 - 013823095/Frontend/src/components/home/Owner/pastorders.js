@@ -3,6 +3,10 @@ import React, { Component } from "react";
 import axios from 'axios'
 import ItemDetails from "./itemdetails";
 import rootUrl from "../../config/settings";
+import {opastorders} from '../../../actions';
+import { reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+
 
 class PastOrders extends Component {
     constructor(props) {
@@ -18,8 +22,7 @@ class PastOrders extends Component {
         const data = {
             userEmail: localStorage.getItem('userEmail')
         }
-        axios.post(rootUrl + "/orders/all-orders", data)
-            .then(response => {
+        this.props.opastorders(data, response => {
                 if (response.status === 200) {
                     console.log(response.data)
                     this.setState({
@@ -62,4 +65,20 @@ class PastOrders extends Component {
     }
 }
 
-export default PastOrders;
+
+
+function mapStateToProps (state) {
+    return {
+      user: state.user
+    }
+  }
+
+
+  export default connect(
+    mapStateToProps,
+    { opastorders }
+  )(
+    reduxForm({
+      form: 'streamSearch'
+    })(PastOrders)
+  )

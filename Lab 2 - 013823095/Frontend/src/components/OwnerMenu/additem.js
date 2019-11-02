@@ -4,6 +4,11 @@ import * as Yup from "yup";
 import axios from 'axios';
 import rootUrl from "../config/settings";
 import swal from 'sweetalert'
+import {additem} from '../../actions';
+import { reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+
+
 
 
 const Price = /^\d+(,\d{3})*(\.\d{1,2})?$/
@@ -53,19 +58,7 @@ class AddItems extends Component {
                             itemImage: profilePhoto.name,
                             itemImagePreview: rootUrl + '/profile/download-file/' + profilePhoto.name
                         })
-                        //Download image
-                        // axios.post('http://localhost:3001/profile/download-file/' + profilePhoto.name)
-                        //     .then(response => {
-                        //         let imagePreview = 'data:image/jpg;base64, ' + response.data;
-                        //         this.setState({
-                        //             itemImage: profilePhoto.name,
-                        //             itemImagePreview: imagePreview
-                        //         })
-
-                        //     }).catch((err) =>{
-                        //         console.log(err)
-                        //         alert("Error at change event image!!")
-                        //     });
+                      
                     }
                 });
         }
@@ -86,22 +79,15 @@ class AddItems extends Component {
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
-        axios.post(rootUrl + '/restaurant/additem', data)
-            .then(response => {
+        this.props.additem(data, response => {
                 console.log("inside success")
                 console.log("Status Code : ", response.status);
                 if (response.status === 200) {
                     console.log("success", response)
                     swal("done","Iteam successfully added","success")
-                    window.location.reload();
-                    // console.log(response)
                 }
             })
-            .catch(error => {
-                console.log("In error");
-                console.log(error);
-                swal("Failed","Update failed! Please try again", "error")
-            })
+            
     }
 
 
@@ -245,7 +231,6 @@ class AddItems extends Component {
                                 <div className="formholder">
                                     <span>
                                         <button className="btn btn-primary" type="submit" id="btn-addItem">Add Item</button>
-                                        {/* &nbsp; <a href="/account" className="btn btn-outline-primary font-weight-bold" id="btn-cancel-profile" name="cancel">Cancel</a> */}
                                     </span>
                                 </div>
 
@@ -262,4 +247,18 @@ class AddItems extends Component {
     }
 }
 
-export default AddItems;
+function mapStateToProps (state) {
+    return {
+      user: state.user
+    }
+  }
+
+
+  export default connect(
+    mapStateToProps,
+    { additem }
+  )(
+    reduxForm({
+      form: 'streamSearch'
+    })(AddItems)
+  )

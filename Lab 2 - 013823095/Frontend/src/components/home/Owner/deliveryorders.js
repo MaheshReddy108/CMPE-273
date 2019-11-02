@@ -3,6 +3,12 @@ import React, { Component } from "react";
 import axios from 'axios'
 import ItemDetails from "./itemdetails";
 import rootUrl from "../../config/settings";
+import {dorder} from '../../../actions';
+import { reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import swal from 'sweetalert';
+
+
 
 class DeliveryOrders extends Component {
     constructor(props) {
@@ -37,22 +43,15 @@ class DeliveryOrders extends Component {
             userEmail: localStorage.getItem('userEmail')
         }
         console.log("data", data)
-        axios.put(rootUrl + '/orders/manage-orders', data)
-            .then(response => {
+        this.props.dorder(data, response => {
                 console.log("inside success")
                 console.log("Status Code : ", response.status);
                 if (response.status === 200) {
                     console.log("response", response.data)
-                    alert("success")
-                    window.location.reload();
+                    swal("Success", "This Order Delivered", "success")
+
                 }
             })
-            .catch(error => {
-                console.log("In error");
-                console.log(error);
-                // alert("User credentials not valid. Please try again!");
-            })
-
     }
 
     render() {
@@ -88,4 +87,20 @@ class DeliveryOrders extends Component {
     }
 }
 
-export default DeliveryOrders;
+
+function mapStateToProps (state) {
+    return {
+      user: state.user
+    }
+  }
+
+
+export default connect(
+    mapStateToProps,
+    { dorder }
+  )(
+    reduxForm({
+      form: 'streamSearch'
+    })(DeliveryOrders)
+  )
+

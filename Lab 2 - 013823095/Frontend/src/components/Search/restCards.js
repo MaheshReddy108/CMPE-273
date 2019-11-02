@@ -1,9 +1,7 @@
 
 import React, { Component } from 'react';
 import './cardstyles.css';
-import {Redirect} from 'react-router-dom'
-import axios from 'axios'
-import logo from '../../images/login-page-burger.png'
+
 import rootUrl from '../config/settings';
 import './cardstyles.css'
 
@@ -33,7 +31,6 @@ class restCard extends Component {
                     <div className = "col-md-3 col-sm-6">
                         <div className="card cardclass" id="cardclass" >
                             <img src={unknown} className="card-img-top" id="card-img-top" alt="..."/>
-                            {/* {profileImageData} */}
                             <div className="card-block" id = "card-title-text">
                                 <h4 className="card-title" id="card-title">{restName}</h4>
                                 <p className="card-text" id="card-text">{restDesc} </p>

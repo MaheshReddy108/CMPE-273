@@ -3,10 +3,13 @@ import React, { Component } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from 'axios';
-import rootUrl from "../config/settings";
+import rootUrl from "../config/settings"; 
 // import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
 import cookie from 'react-cookies';
+import {getOwnerProfile} from '../../actions';
+import { updateProfile } from '../../actions';
+import { connect } from 'react-redux';
 
 
 const phoneRegExp = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
@@ -74,8 +77,7 @@ class OwnerProfile extends Component {
         const data = {
             userEmail: localStorage.getItem('userEmail')
         }
-        axios.post(rootUrl + '/profile/getprofile', data)
-            .then(response => {
+        this.props.getOwnerProfile(data , response => {
                 console.log("inside success")
                 console.log("Status Code : ", response.status);
                 if (response.status === 200) {
@@ -109,36 +111,11 @@ class OwnerProfile extends Component {
 
                         })
                     }
-                    //Download image
-                    //   axios.post('http://localhost:3001/profile/download-file/' + response.data[0].userImage)
-                    //       .then(response => {
-                    //           let imagePreview = 'data:image/jpg;base64, ' + response.data;
-                    //           this.setState({
-                    //               profileImagePreview: imagePreview
-                    //           })
-
-                    //       });
-                    //  axios.post('http://localhost:3001/profile/download-file/' + response.data[1].restImage)
-                    //       .then(response => {
-                    //           let imagePreview = 'data:image/jpg;base64, ' + response.data;
-                    //           this.setState({
-                    //               restImagePreview: imagePreview
-                    //           })
-
-                    //       });
+                   
                 }
 
-                // sessionStorage.setItem(response.data)
-                // console.log(this.state.authFlag)
             })
-            .catch(error => {
-                console.log("In error");
-                // this.setState({
-                //     authFlag : "false"
-                // });
-                console.log(error);
-                // alert("User credentials not valid. Please try again!");
-            })
+           
     }
 
 
@@ -250,7 +227,7 @@ class OwnerProfile extends Component {
         document.getElementById('btn-edit').style.visibility = "hidden";
     }
 
-    submitProfile = (details) => {
+    onsubmit = (details) => {
         console.log("Inside profile update", details);
         const data = {
             userPassword: details.password,
@@ -264,8 +241,7 @@ class OwnerProfile extends Component {
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
-        axios.put(rootUrl + '/profile/updateprofile', data)
-            .then(response => {
+        this.props.updateProfile(data , response => {
                 console.log("inside success")
                 console.log("Status Code : ", response.status);
                 if (response.status === 200) {
@@ -273,11 +249,6 @@ class OwnerProfile extends Component {
                     // alert("success")
                     // console.log(response)
                 }
-            })
-            .catch(error => {
-                console.log("In error");
-                console.log(error);
-                alert("Update failed! Please try again")
             })
         this.savechanges()
     }
@@ -372,7 +343,7 @@ class OwnerProfile extends Component {
                             }}
                         validationSchema={ProfileSchema}
                         onSubmit={(values, actions) => {
-                            this.submitProfile(values)
+                            this.onsubmit(values)
                             actions.setSubmitting(false);
                         }}
                     >
@@ -632,4 +603,12 @@ class OwnerProfile extends Component {
     }
 }
 
-export default OwnerProfile;
+
+function mapStateToProps(state) {
+    return {
+      user: state.user
+    };
+  }
+  
+  export default connect( mapStateToProps , { getOwnerProfile: getOwnerProfile, updateProfile:updateProfile})(OwnerProfile);
+  

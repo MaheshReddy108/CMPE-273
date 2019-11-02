@@ -5,6 +5,7 @@ import axios from 'axios';
 import NavBar from "../Navbar/navbar";
 import rootUrl from "../config/settings";
 import swal from 'sweetalert'
+import { Redirect } from 'react-router';
 
 
 const updateSectionSchema = Yup.object().shape({
@@ -100,7 +101,7 @@ class EditSection extends Component {
                                 <br />
                                 <div className="formholder">
                                     <span>
-                                        <button className="btn btn-primary" type="submit" id="btn-editItem">Save</button>
+                                        <button className="btn btn-primary" type="submit" id="btn-editItem" >Save</button>
                                         {/* &nbsp; <a href="/account" className="btn btn-outline-primary font-weight-bold" id="btn-cancel-profile" name="cancel">Cancel</a> */}
                                     </span>
                                 </div>

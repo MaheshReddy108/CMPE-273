@@ -7,8 +7,9 @@ import '../../App.css';
 import rootUrl from "../config/settings";
 import { Redirect } from 'react-router';
 import cookie from 'react-cookies';
-// import cookie from 'react-cookies';
-// import {Redirect} from 'react-router';
+import {getProfile } from '../../actions';
+import { connect } from 'react-redux';
+import {updateProfile} from '../../actions';
 
 
 
@@ -69,8 +70,7 @@ class UserProfile extends Component {
         const data = {
             userEmail: localStorage.getItem('userEmail')
         }
-        axios.post(rootUrl + '/profile/getprofile', data)
-            .then(response => {
+        this.props.getProfile( data, response=>{
                 console.log("inside success")
                 console.log("Status Code : ", response.status);
                 if (response.status === 200) {
@@ -92,23 +92,10 @@ class UserProfile extends Component {
                             profileImagePreview: rootUrl + "/profile/download-file/" + response.data.userImage
                         })
                     }
-                    // }
-                    //Download image
-                    // axios.get('http://localhost:3001/profile/download-file/' + response.data.userImage)
-                    //     .then(response => {
-                    //         // let imagePreview = 'data:image/jpg;base64, ' + response.data;
-                    //         this.setState({
-                    //             profileImagePreview: response.data
-                    //         })
-
-                    //     });
+                    
                 }
             })
-            .catch(error => {
-                console.log("In error");
-                console.log(error);
-                // alert("User credentials not valid. Please try again!");
-            })
+            
     }
 
     //handle change of profile image
@@ -130,19 +117,7 @@ class UserProfile extends Component {
                             profileImage: profilePhoto.name,
                             profileImagePreview: rootUrl + "/profile/download-file/" + profilePhoto.name
                         })
-                        //Download image
-                        // axios.post('http://localhost:3001/profile/download-file/' + profilePhoto.name)
-                        //     .then(response => {
-                        //         let imagePreview = 'data:image/jpg;base64, ' + response.data;
-                        //         this.setState({
-                        //             profileImage: profilePhoto.name,
-                        //             profileImagePreview: imagePreview
-                        //         })
-
-                        //     }).catch((err) =>{
-                        //         console.log(err)
-                        //         alert("Error at change event image!!")
-                        //     });
+                       
                     }
                 });
         }
@@ -164,7 +139,7 @@ class UserProfile extends Component {
     }
 
 
-    submitProfile = (details) => {
+    onsubmit = (details) => {
         console.log("Inside profile update", details);
         const data = {
             userPassword: details.password,
@@ -175,11 +150,11 @@ class UserProfile extends Component {
             userImage: this.state.profileImage,
             userEmail: localStorage.getItem('userEmail')
         }
+
         //set the with credentials to true
         axios.defaults.withCredentials = true;
         //make a post request with the user data
-        axios.put(rootUrl + '/profile/updateprofile', data)
-            .then(response => {
+        this.props.updateProfile( data, response=>{
                 console.log("inside success")
                 console.log("Status Code : ", response.status);
                 if (response.status === 200) {
@@ -188,11 +163,7 @@ class UserProfile extends Component {
                     // console.log(response)
                 }
             })
-            .catch(error => {
-                console.log("In error");
-                console.log(error);
-                alert("Update failed! Please try again")
-            })
+           
         this.savechanges()
     }
 
@@ -243,7 +214,7 @@ class UserProfile extends Component {
                             }}
                         validationSchema={SignUpSchema}
                         onSubmit={(values, actions) => {
-                            this.submitProfile(values);
+                            this.onsubmit(values);
                             actions.setSubmitting(false);
                         }}
                     >
@@ -399,4 +370,12 @@ class UserProfile extends Component {
     }
 }
 
-export default UserProfile
+
+function mapStateToProps(state) {
+    return {
+      user: state.user
+    };
+  }
+  
+  export default connect( mapStateToProps , {getProfile: getProfile,updateProfile:updateProfile})(UserProfile);
+  

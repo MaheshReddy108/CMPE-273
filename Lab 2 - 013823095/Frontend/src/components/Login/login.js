@@ -6,7 +6,10 @@ import logo from '../../images/login-page.jpg'
 import axios from 'axios';
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
-import rootUrl from '../config/settings'
+import rootUrl from '../config/settings';
+import { loginuser } from '../../actions'
+import { reduxForm } from 'redux-form'
+import { connect } from 'react-redux'
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -25,45 +28,36 @@ class LoginForm extends Component {
             authFlag: 'false'
         };
 
-        this.submitLogin = this.submitLogin.bind(this);
+        // this.submitLogin = this.submitLogin.bind(this);
+    }
+    componentDidMount () {
+        this.setState({
+          authFlag: false,
+          authFailed: false
+        })
     }
 
-    submitLogin = (details) => {
-        console.log("Inside submit login", details);
-        const data = {
-            userEmail: details.email,
-            userPassword: details.password
+    onsubmit = (formValues) => {
+        console.log('OnSubmit' + formValues)
+        let data = {
+            userEmail: formValues.email,
+            userPassword: formValues.password
         }
-        //set the with credentials to true
-        axios.defaults.withCredentials = true;
-        //make a post request with the user data
-        axios.post(rootUrl + '/login', data)
-            .then(response => {
-                console.log("inside success")
-                console.log("Status Code : ", response.status);
-                if (response.status === 200) {
-                    console.log("response", response.data)
-                    localStorage.setItem("accountType", response.data.accountType)
-                    localStorage.setItem("userName", response.data.userName)
-                    localStorage.setItem("userEmail", response.data.userEmail)
-                    this.setState({
-                        authFlag: true
-                    })
-                    // alert("success")
-                    // console.log(response)
-                }
-                console.log(this.state.authFlag)
+        axios.defaults.withCredentials = true
+        this.props.loginuser(data, res => {
+          if (res.status === 200) {
+            console.log('Inside response',res.data);
+            this.setState({
+              authFlag:true
             })
-            .catch(error => {
-                console.log("In error");
-                this.setState({
-                    authFlag: "false"
-                });
-                console.log(error);
-                alert("User credentials not valid. Please try again!");
-            })
-    }
-
+            localStorage.setItem("accountType", res.data.accountType)
+            localStorage.setItem("userName", res.data.userName)
+            localStorage.setItem("userEmail", res.data.userEmail)
+          } else {
+            alert('Please enter valid credentials')
+          }
+        })
+      }
 
     render() {
         // console.log("test cookie",cookie.load('username-localhost-8888'))
@@ -75,7 +69,7 @@ class LoginForm extends Component {
                 redirectVar = <Redirect to="/ownerhome" />
             }
             else if (localStorage.getItem("accountType") === "1") {
-                console.log('hello')
+                console.log('user logged in')
                 redirectVar = <Redirect to="/userhome" />
             }
         }
@@ -91,14 +85,20 @@ class LoginForm extends Component {
                             <div className="card-body text-left" >
                                 <h4 className="text-black text-left font-weight-bold">Sign in with your Grubhub <br />account</h4>
                                 <br />
+                                
                                 <Formik
                                     initialValues={this.state}
                                     validationSchema={LoginSchema}
                                     onSubmit={(values, actions) => {
-                                        this.submitLogin(values)
+                                        this.onsubmit(values)
                                         actions.setSubmitting(false);
                                     }}
                                 >
+                                    {/* <form
+                                    className='ui form error'
+                                    onSubmit={this.props.handleSubmit(this.onSubmit)}
+
+                                > */}
                                     {({ touched, errors, isSubmitting }) => (
                                         <Form>
                                             <div className="form-group text-left">
@@ -138,7 +138,7 @@ class LoginForm extends Component {
                                             <button
                                                 type="submit"
                                                 // id="signin"
-                                                className="btn btn-success btn-block text-white font-weight-bold"
+                                                className="btn btn-danger btn-block text-white font-weight-bold"
                                             // disabled={!isSubmitting}
                                             >
                                                 {/* {isSubmitting ? "Please wait..." : "Sign in"} */}
@@ -146,8 +146,9 @@ class LoginForm extends Component {
                                                 </button>
                                         </Form>
                                     )}
-                                </Formik>
+                                   {/* </form> */}
 
+                                </Formik>
                                 <br />
                                 Don't have an account?&nbsp;&nbsp;<Link to="/customersignup">Create your customer account!</Link>
                                 <br />
@@ -162,6 +163,33 @@ class LoginForm extends Component {
 }
 
 
-export default LoginForm;
-
-
+const validate = formValues => {
+    const error = {}
+    if (!formValues.email) {
+      error.email = 'Enter a valid email'
+    }
+    if (!formValues.password) {
+      error.password = 'Enter a valid Password'
+    }
+    return error
+  }
+  // export Login Component
+  // const formWrapped= reduxForm({
+  //   form: 'streamLogin',
+  //   validate: validate
+  // })(Login)
+  
+  // export default connect(null,{loginuser:loginuser})(formWrapped)
+  const mapStateToProps = state => {
+    return { user: state.user }
+  }
+  
+  export default connect(
+    mapStateToProps,
+    { loginuser }
+  )(
+    reduxForm({
+      form: 'streamLogin',
+      validate: validate
+    })(LoginForm)
+  )

@@ -7,6 +7,10 @@ import axios from 'axios'
 import './restHome.css'
 import RestCuisines from './restCuisines'
 import swal from 'sweetalert';
+import {addcart} from '../../actions';
+import { connect } from 'react-redux'
+import { reduxForm } from 'redux-form'
+
 
 // var images = require.context('../../../../backend/uploads/', true);
 
@@ -99,8 +103,7 @@ class RestaurantHome extends Component {
         }
         console.log(data);
         if (itemQuantity > 0) {
-            axios.post(rootUrl + '/cart/addToCart', data)
-                .then(response => {
+            this.props.addcart(data, response => {
                     console.log(response)
                     if (response.status === 200) {
 
@@ -109,18 +112,7 @@ class RestaurantHome extends Component {
                     else {
                         console.log("Didn't fetch items data")
                     }
-                }).catch((err) => {
-                    if (err) {
-                        if (err.response.status === 406) {
-                            console.log("Error messagw", err.response.status);
-                            swal(err.response.data)
-                        }
-                        else {
-                            swal("Database connection failed. please try again later")
-                        }
-                    }
-
-                });
+                })
         }
         else {
             alert("Quantity should me more than 0");
@@ -257,4 +249,20 @@ class RestaurantHome extends Component {
     }
 }
 
-export default RestaurantHome;
+function mapStateToProps (state) {
+    return {
+      user: state.user
+    }
+  }
+  
+  // export default connect( mapStateToProps , {getProfile: getProfile, getUserImage:getUserImage})(Search);
+  
+  export default connect(
+    mapStateToProps,
+    { addcart }
+  )(
+    reduxForm({
+      form: 'streamSearch'
+      // validate: validate
+    })(RestaurantHome)
+  )

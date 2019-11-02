@@ -37,7 +37,7 @@ class ItemDisplay extends Component {
                                     <input id="quant-text" type="number" readOnly value= {itemQuantity}   />
                                     <button id="add-button" className="btn btn-primary" onClick={() => this.props.handleIncrement(itemName)} >+</button>
                                 </span>
-                                <button id="btn-item-add-to-cart" onClick={() => this.props.togglePopup(itemPrice, itemId, restId, itemQuantity)} className="btn btn-success">Add to cart </button>
+                                <button id="btn-item-add-to-cart" onClick={() => this.props.togglePopup(itemPrice, itemId, restId, itemQuantity)} className="btn btn-danger">Add to cart </button>
                             </div>
                         </div>
                     </div>

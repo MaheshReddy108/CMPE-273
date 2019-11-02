@@ -5,6 +5,10 @@ import Navbar from '../Navbar/navbar';
 import UniqueOrders from './uniqueOrders'
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
+import {order } from '../../actions';
+import { connect } from 'react-redux'
+import { reduxForm } from 'redux-form'
+
 
 class UpcomingOrders extends Component {
     constructor() {
@@ -18,8 +22,7 @@ class UpcomingOrders extends Component {
         const data = {
             userEmail: localStorage.getItem('userEmail')
         }
-        axios.post(rootUrl + '/orders/upcomingOrders', data)
-            .then(response => {
+        this.props.order(data, response => {
                 console.log(response.data)
                 if (response.status === 200) {
                     console.log(typeof response.data);
@@ -83,4 +86,23 @@ class UpcomingOrders extends Component {
     }
 }
 
-export default UpcomingOrders;
+
+
+function mapStateToProps (state) {
+    return {
+      user: state.user
+    }
+  }
+  
+  // export default connect( mapStateToProps , {getProfile: getProfile, getUserImage:getUserImage})(Search);
+  
+  export default connect(
+    mapStateToProps,
+    { order }
+  )(
+    reduxForm({
+      form: 'streamSearch'
+      // validate: validate
+    })(UpcomingOrders)
+)
+

@@ -5,6 +5,10 @@ import Navbar from '../Navbar/navbar';
 import UniqueOrders from './uniqueOrders'
 import cookie from 'react-cookies';
 import { Redirect } from 'react-router';
+import {pastorder } from '../../actions';
+import { connect } from 'react-redux'
+import { reduxForm } from 'redux-form'
+
 
 class PastOrders extends Component {
     constructor() {
@@ -18,8 +22,7 @@ class PastOrders extends Component {
         const data = {
             userEmail: localStorage.getItem('userEmail')
         }
-        axios.post(rootUrl + '/orders/previousOrders', data)
-            .then(response => {
+        this.props.pastorder(data, response => {
                 console.log(response.data)
                 if (response.status === 200) {
                     console.log(typeof response.data);
@@ -27,7 +30,7 @@ class PastOrders extends Component {
                         userOrders: JSON.stringify(response.data),
                     })
                 }
-                else {
+                else { 
                     console.log("Didn't fetch previous data")
                 }
             })
@@ -84,4 +87,22 @@ class PastOrders extends Component {
     }
 }
 
-export default PastOrders;
+
+
+function mapStateToProps (state) {
+    return {
+      user: state.user
+    }
+  }
+  
+  // export default connect( mapStateToProps , {getProfile: getProfile, getUserImage:getUserImage})(Search);
+  
+  export default connect(
+    mapStateToProps,
+    { pastorder }
+  )(
+    reduxForm({
+      form: 'streamSearch'
+      // validate: validate
+    })(PastOrders)
+)

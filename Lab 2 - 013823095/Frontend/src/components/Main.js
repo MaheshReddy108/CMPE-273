@@ -16,7 +16,7 @@ import OwnerHome from './home/Owner/ownerhome';
 import Menu from '../components/OwnerMenu/menu';
 import EditItem from './OwnerMenu/edititem';
 import EditSection from './OwnerMenu/editsection';
-
+ 
 import restCard from '../components/Search/restCards';
 import searchResults from '../components/Search/searchResults'
 import RestaurantHome from '../components/restaurants/restaurantHome'
@@ -45,7 +45,6 @@ class MainRoutes extends Component {
                 <Route path="/menu" component={Menu} />
                 <Route path="/edititem" component={EditItem} />
                 <Route path="/editsection" component={EditSection} />
-                {/* abhilash */}
                 <Route path="/userhome" component={Home} />
                 <Route path="/restcard" component={restCard} />
                 <Route path="/searchresults" component={searchResults} />

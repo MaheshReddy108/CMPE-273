@@ -5,7 +5,10 @@ import NavBar from '../Navbar/navbar'
 import Background from '../../images/homeBackground.jpg';
 import axios from 'axios'
 import rootUrl from '../config/settings';
-import swal from 'sweetalert'
+import { connect } from 'react-redux'
+import {search }from'../../actions'
+import { reduxForm } from 'redux-form'
+
 
 var sectionStyle = {
     width: "100%",
@@ -53,8 +56,8 @@ class Home extends Component {
             userEmail: localStorage.getItem('userEmail')
         }
         console.log(data.itemName)
-        axios.post(rootUrl + '/restaurant/restaurantsbyItemName', data)
-            .then(response => {
+        this.props.search(data, response => {
+        
                 console.log(response.status);
                 if (response.status === 200) {
                     let restDetails = JSON.stringify(response.data)
@@ -67,19 +70,7 @@ class Home extends Component {
                     console.log("response is 200. data received")
                 }
                 
-            }).catch((err) => {
-                if (err) {
-                    if (err === 401) {
-                       
-                        console.log("Error messagw", err.response.status);
-                        swal(err.response.data)
-                    }
-                    else {
-                        swal("Something went wrong! please try again later")
-                    }
-                }
-
-            });
+            })
     }
 
 
@@ -126,4 +117,21 @@ class Home extends Component {
     }
 }
 
-export default Home;
+
+function mapStateToProps (state) {
+    return {
+      user: state.user
+    }
+  }
+  
+  // export default connect( mapStateToProps , {getProfile: getProfile, getUserImage:getUserImage})(Search);
+  
+  export default connect(
+    mapStateToProps,
+    { search }
+  )(
+    reduxForm({
+      form: 'streamSearch'
+      // validate: validate
+    })(Home)
+  )

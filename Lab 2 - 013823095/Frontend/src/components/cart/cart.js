@@ -7,6 +7,11 @@ import CartCard from './cartCard'
 import cookie from 'react-cookies';
 import './cartCardcss.css'
 import { Redirect } from 'react-router';
+import {cart } from '../../actions';
+import { connect } from 'react-redux'
+import { reduxForm } from 'redux-form'
+
+
 
 class Cart extends Component {
     constructor() {
@@ -20,8 +25,7 @@ class Cart extends Component {
         const data = {
             userEmail: localStorage.getItem('userEmail')
         }
-        axios.post(rootUrl + '/cart/showCart', data)
-            .then(response => {
+        this.props.cart(data, response => {
                 console.log(response)
                 if (response.status === 200) {
                     console.log(response.data);
@@ -123,7 +127,7 @@ class Cart extends Component {
                         {message}
                         <span id="placeorder">
                             <p id="carttotal">Your cart total : ${cartTotal}</p>
-                            <button onClick={this.placeOrder} className="btn btn-success" >Place Order</button>
+                            <button onClick={this.placeOrder} className="btn btn-danger" >Place Order</button>
                         </span>
                     </div>
                 </div>
@@ -139,4 +143,22 @@ class Cart extends Component {
     }
 }
 
-export default Cart;
+
+
+function mapStateToProps (state) {
+    return {
+      user: state.user
+    }
+  }
+  
+  // export default connect( mapStateToProps , {getProfile: getProfile, getUserImage:getUserImage})(Search);
+  
+  export default connect(
+    mapStateToProps,
+    { cart }
+  )(
+    reduxForm({
+      form: 'streamSearch'
+      // validate: validate
+    })(Cart)
+  )

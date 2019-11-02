@@ -7,6 +7,11 @@ import { Redirect } from 'react-router-dom'
 import rootUrl from '../config/settings';
 import cookie from 'react-cookies';
 import './cardstyles.css';
+import { connect } from 'react-redux'
+import { vRestaurant, cRestaurant }from'../../actions'
+import { reduxForm } from 'redux-form'
+
+
 
 
 class searchResults extends Component {
@@ -66,8 +71,7 @@ class searchResults extends Component {
             restId: restId,
             userEmail: localStorage.getItem('userEmail')
         }
-        axios.post(rootUrl + '/restaurant/itemsByRestaurant', data)
-            .then(response => {
+        this.props.vRestaurant(data, response => {
                 console.log(response)
                 if (response.status === 200) {
                     let itemDetails = JSON.stringify(response.data)
@@ -97,8 +101,7 @@ class searchResults extends Component {
         }
         console.log(data)
         if (data.cuisineName) {
-            axios.post(rootUrl + '/restaurant/restaurantsbyItemCuisine', data)
-                .then(response => {
+            this.props.cRestaurant(data, response => {
                     console.log(response)
                     if (response.status === 200) {
                         let restCuisineDetails = JSON.stringify(response.data)
@@ -168,7 +171,7 @@ class searchResults extends Component {
                             </div>
                         </div>
                         <div id="right">
-                            <div id="search-results-text"><p>Your Search Results....</p></div>
+                            <div id="search-results-text"><p><b>Your Search Results</b></p></div>
                             <div className="card-group" >
                                 {restCards}
                             </div>
@@ -177,11 +180,7 @@ class searchResults extends Component {
                 </div>
             );
         }
-        // let restCards = this.state.people.map(person => {
-        //     return (
-        //         <RestCard key={person.id} removePerson={this.removePerson.bind(this)} person={person} />
-        //     )
-        // })
+        
         else {
             return (
                 <div>
@@ -194,4 +193,22 @@ class searchResults extends Component {
     }
 }
 
-export default searchResults;
+
+
+function mapStateToProps (state) {
+    return {
+      user: state.user
+    }
+  }
+  
+  // export default connect( mapStateToProps , {getProfile: getProfile, getUserImage:getUserImage})(Search);
+  
+  export default connect(
+    mapStateToProps,
+    { vRestaurant, cRestaurant }
+  )(
+    reduxForm({
+      form: 'streamSearch'
+      // validate: validate
+    })(searchResults)
+  )

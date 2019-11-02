@@ -2,16 +2,16 @@
   position: absolute;
   /* position: fixed; */
   right: 100px;
-  color: white;
+  color: rgb(252, 1, 1);
 } 
 
 .navbar-inverse{
     position: absolute;
   /* position: fixed; */
   right: 140px;
-}
+} 
 .logo-main{
-    color: white;
+    color: rgb(250, 3, 3);
 }
 .dropdown:hover>.dropdown-menu{
   display: block;

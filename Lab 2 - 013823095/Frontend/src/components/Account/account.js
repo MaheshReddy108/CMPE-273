@@ -79,14 +79,8 @@ class Account extends Component {
                                         <li className="nav-item  text-left">
                                             <a className="nav-link font-weight-bold" id='profile' href="#/profile" onClick={this.onProfile}>Profile</a>
                                         </li>
-                                        {/* <li className="nav-item">
-                                    <a className="nav-link font-weight-bold" id='pastorders'  href="#/pastorders" onClick={this.onPastorders}>Past Orders</a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link font-weight-bold" id='upcomingorders' href="#/upcomingorders" onClick={this.onUpcomingorders}>Upcoming Orders</a>
-                                </li> */}
+                                        
                                     </ul>
-                                    {/* <br/><br/><br/><br/><br/><br/><br/> */}
                                 </div>
                             </div>
                         </div>

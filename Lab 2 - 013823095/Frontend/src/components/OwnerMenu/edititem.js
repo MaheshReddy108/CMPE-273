@@ -127,6 +127,7 @@ class EditItem extends Component {
                                 }}
                             validationSchema={AddItemSchema}
                             onSubmit={(values, actions) => {
+                                console.log(values)
                                 this.editItem(values);
                                 actions.setSubmitting(false);
                             }}
@@ -160,9 +161,6 @@ class EditItem extends Component {
                                         <Field
                                             type="itemPrice"
                                             name="itemPrice"
-                                            // onChange={this.passwordChangeHandler}
-                                            // value={this.state.password}
-
                                             className={`form-control ${
                                                 touched.itemPrice && errors.itemPrice ? "is-invalid" : ""
                                                 }`}
