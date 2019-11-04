@@ -1,7 +1,7 @@
 var Model = require('../DatabaseConnection');
 
 function handle_request(message, callback){
-    console.log('Inside Kafka Method trip-details. Message ', message);
+    console.log('Inside Kafka Method Order-details. Message ', message);
     
     Model.Userdetails.findOne({
         Email: message.session.user.Email        
@@ -11,8 +11,8 @@ function handle_request(message, callback){
             callback(err, null);
         }
         else {
-            console.log('Trip details', JSON.stringify(user.Tripdetails));
-            callback(null, user.Tripdetails);
+            console.log('Order details', JSON.stringify(user.Orderdetails));
+            callback(null, user.Orderdetails);
         }
     });
 }

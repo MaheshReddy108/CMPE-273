@@ -18,13 +18,7 @@ function handle_request(message, callback){
             user.LastName = message.body.LastName;
             user.Email = message.body.Email;
             user.Aboutme = message.body.Aboutme;
-            user.Country = message.body.Country;
-            user.City = message.body.City;
-            user.Gender = message.body.Gender;
-            user.Hometown = message.body.Hometown;
-            user.School = message.body.School;
-            user.Company = message.body.Company;
-            user.Language = message.body.Language;
+            user.Address = message.body.Address;
             user.PhoneNumber = message.body.PhoneNumber;
             user.ProfileImage = message.body.ProfileImage;
 

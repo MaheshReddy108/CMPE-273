@@ -6,14 +6,11 @@ async function handle_request(message, callback){
     const userSession = message.session.user;
 
     var booking = new Model.BookingDetails({
-        'PropertyId': message.body.PropertyId,
-        'Bookingstartdate': message.body.Bookingstartdate,
-        'Bookingenddate': message.body.Bookingenddate,
-        'Guests': message.body.Guests,
+        'RestaurantId': message.body.RestaurantId,
         'TotalCost': message.body.TotalCost,
         'Ownername': message.body.Ownername,
-        'Travelername': userSession.FirstName + " " + userSession.LastName,
-        'TravelerId': userSession.ProfileId,
+        'Buyername': userSession.FirstName + " " + userSession.LastName,
+        'BuyerId': userSession.ProfileId,
     });
 
     await booking.save().then((doc) => {
@@ -33,18 +30,15 @@ async function handle_request(message, callback){
         }
         else {
 
-            var propertyDetails = message.body.PropertyDetails;
-            propertyDetails.PropertyId = message.body.PropertyId;
-            propertyDetails.Bookingstartdate = message.body.Bookingstartdate;
-            propertyDetails.Bookingenddate = message.body.Bookingenddate;
-            propertyDetails.Guests = message.body.Guests;
-            propertyDetails.TotalCost = message.body.TotalCost;
-            propertyDetails.Ownername = message.body.Ownername;
-            propertyDetails.Travelername = userSession.FirstName + " " + userSession.LastName;
-            propertyDetails.TravelerId = userSession.ProfileId;
+            var RestaurantDetails = message.body.RestaurantDetails;
+            RestaurantDetails.RestaurantId = message.body.RestaurantId;
+            RestaurantDetails.TotalCost = message.body.TotalCost;
+            RestaurantDetails.Ownername = message.body.Ownername;
+            RestaurantDetails.Buyername = userSession.FirstName + " " + userSession.LastName;
+            RestaurantDetails.BuyerId = userSession.ProfileId;
 
-            user.Tripdetails = user.Tripdetails || [];
-            user.Tripdetails.push(propertyDetails);
+            user.Orderdetails = user.Orderdetails || [];
+            user.Orderdetails.push(RestaurantDetails);
             user.save().then((doc) => {
                 console.log('Booking details saved to user details', doc);
                 callback(null, doc);

@@ -11,8 +11,8 @@ function handle_request(message, callback){
             callback(err, null);
         }
         else {
-            console.log('Property details of owner', JSON.stringify(user.PropertyDetails));
-            callback(null, user.PropertyDetails);
+            console.log('Restaurant details of owner', JSON.stringify(user.RestaurantDetails));
+            callback(null, user.RestaurantDetails);
         }
     });
 }

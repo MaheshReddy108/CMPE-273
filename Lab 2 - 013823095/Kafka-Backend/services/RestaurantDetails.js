@@ -1,17 +1,17 @@
 var Model = require('../DatabaseConnection');
 
 function handle_request(message, callback){
-    console.log('Inside Kafka Method Property Details. Message ', message);
+    console.log('Inside Kafka Method Restaurant Details. Message ', message);
 
-    Model.PropertyDetails.find({
-        PropertyId: message.body.PropertyId
+    Model.RestaurantDetails.find({
+        RestaurantId: message.body.RestaurantId
     }, (err, result) => {
         if (err) {
-            console.log('Error in Retrieving property data', err);
+            console.log('Error in Retrieving Restaurant data', err);
             callback(err, null);
         }
         else {
-            console.log('Property Data ', JSON.stringify(result));
+            console.log('Restaurant Data ', JSON.stringify(result));
             callback(null, result);
         }        
     });

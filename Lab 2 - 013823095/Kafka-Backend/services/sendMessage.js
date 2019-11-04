@@ -4,14 +4,14 @@ var mongooseTypes = require('mongoose').Types;
 function handle_request(message, callback) {
     //console.log('Inside Kafka Method Send Message. Message ', message);
     console.log('Inside Kafka Method Send Message. Message ', message.body);
-    if (message.body.traveler === true) {
+    if (message.body.Buyer === true) {
         var messageData = {
-            traveler: message.body.messageContent
+            Buyer: message.body.messageContent
         }
 
         var message = new Model.MessageCollection({
-            PropertyId: message.body.PropertyId,
-            TravelerId: message.session.user.ProfileId,
+            RestaurantId: message.body.RestaurantId,
+            BuyerId: message.session.user.ProfileId,
             OwnerId: message.body.OwnerId,
             Message: messageData,
             MessageId :  mongooseTypes.ObjectId()
@@ -42,7 +42,7 @@ function handle_request(message, callback) {
                 var messageFromDb = result.Message;
                 console.log('message', messageFromDb);
                 var newMessage = {
-                    traveler: messageFromDb.traveler,
+                    Buyer: messageFromDb.Buyer,
                     owner: message.body.messageContent
                 }
 

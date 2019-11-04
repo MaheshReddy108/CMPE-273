@@ -2,10 +2,10 @@ var Model = require('../DatabaseConnection');
 var mongooseTypes = require('mongoose').Types;
 
 function handle_request(message, callback){
-    console.log('Inside Kafka Method Add property. Message ', message);
+    console.log('Inside Kafka Method Add Restaurant. Message ', message);
 
-    const propertyId = mongooseTypes.ObjectId();
-    const newProperty = message.body;
+    const RestaurantId = mongooseTypes.ObjectId();
+    const newRestaurant = message.body;
     const userSession = message.session.user;
 
 
@@ -13,76 +13,62 @@ function handle_request(message, callback){
             Email: userSession.Email
         }, function (err, user) {
             if (err) {
-                console.log("Add-property. Unable to fetch user details.", err);
+                console.log("Add-Restaurant. Unable to fetch user details.", err);
                 res.writeHead(400, {
                     'Content-type': 'text/plain'
                 });
-                res.end('Add-property. Error in fetching user details!');
+                res.end('Add-Restaurant. Error in fetching user details!');
             }
             else {
                 console.log('User', user);
-                var propertyDetails = {
-                    //PropertyId: propertyId.toString(),
-                    Country: newProperty.LocationDetails.country,
-                    StreetAddress: newProperty.LocationDetails.streetAddress,
-                    UnitNumber: newProperty.LocationDetails.unitNumber,
-                    City: newProperty.LocationDetails.city,
-                    State: newProperty.LocationDetails.state,
-                    ZipCode: newProperty.LocationDetails.zipCode,
-                    Headline: newProperty.Details.headline,
-                    Description: newProperty.Details.description,
-                    PropertyType: newProperty.Details.propertyType,
-                    Bedrooms: newProperty.Details.bedrooms,
-                    Accomodates: newProperty.Details.accomodates,
-                    Bathrooms: newProperty.Details.bathrooms,
-                    Photos: newProperty.Photos.photos,
-                    AvailabilityStartDate: new Date(newProperty.PricingDetails.availabilityStartDate),
-                    AvailabilityEndDate: new Date(newProperty.PricingDetails.availabilityEndDate),
-                    Currency: newProperty.PricingDetails.currency + newProperty.PricingDetails.baserate,
-                    Baserate: newProperty.PricingDetails.currency + newProperty.PricingDetails.baserate,
-                    MinStay: newProperty.PricingDetails.minStay
+                var RestaurantDetails = {
+                    //RestaurantId: RestaurantId.toString(),
+                    Country: newRestaurant.LocationDetails.country,
+                    StreetAddress: newRestaurant.LocationDetails.streetAddress,
+                    UnitNumber: newRestaurant.LocationDetails.unitNumber,
+                    City: newRestaurant.LocationDetails.city,
+                    State: newRestaurant.LocationDetails.state,
+                    ZipCode: newRestaurant.LocationDetails.zipCode,
+                    Headline: newRestaurant.Details.headline,
+                    Description: newRestaurant.Details.description,
+                    RestaurantType: newRestaurant.Details.RestaurantType,
+                    Photos: newRestaurant.Photos.photos,
+                    
                 };
-                user.PropertyDetails = user.PropertyDetails || [];
-                user.PropertyDetails.push(propertyDetails);
+                user.RestaurantDetails = user.RestaurantDetails || [];
+                user.RestaurantDetails.push(RestaurantDetails);
 
-                /**Save property to user details */
+                /**Save Restaurant to user details */
                 user.save().then((doc) => {
 
-                    console.log("Property details saved successfully.", doc);
+                    console.log("Restaurant details saved successfully.", doc);
 
 
                 }, (err) => {
-                    console.log("Unable to property details.", err);
+                    console.log("Unable to Restaurant details.", err);
                     callback(err, null);
                 });
 
-                /**Save property to user details */
+                /**Save Restaurant to user details */
 
 
             }
         });
 
-        /**Creating property object to add to Property details collection */
-        var property = new Model.PropertyDetails({
-            PropertyId: propertyId,
-            Country: newProperty.LocationDetails.country,
-            StreetAddress: newProperty.LocationDetails.streetAddress,
-            UnitNumber: newProperty.LocationDetails.unitNumber,
-            City: newProperty.LocationDetails.city,
-            State: newProperty.LocationDetails.state,
-            ZipCode: newProperty.LocationDetails.zipCode,
-            Headline: newProperty.Details.headline,
-            Description: newProperty.Details.description,
-            PropertyType: newProperty.Details.propertyType,
-            Bedrooms: newProperty.Details.bedrooms,
-            Accomodates: newProperty.Details.accomodates,
-            Bathrooms: newProperty.Details.bathrooms,
-            Photos: newProperty.Photos.photos,
-            AvailabilityStartDate: new Date(newProperty.PricingDetails.availabilityStartDate),
-            AvailabilityEndDate: new Date(newProperty.PricingDetails.availabilityEndDate),
-            Currency: newProperty.PricingDetails.currency + newProperty.PricingDetails.baserate,
-            Baserate: newProperty.PricingDetails.currency + newProperty.PricingDetails.baserate,
-            MinStay: newProperty.PricingDetails.minStay,
+        /**Creating Restaurant object to add to Restaurant details collection */
+        var Restaurant = new Model.RestaurantDetails({
+            RestaurantId: RestaurantId,
+            Country: newRestaurant.LocationDetails.country,
+            StreetAddress: newRestaurant.LocationDetails.streetAddress,
+            UnitNumber: newRestaurant.LocationDetails.unitNumber,
+            City: newRestaurant.LocationDetails.city,
+            State: newRestaurant.LocationDetails.state,
+            ZipCode: newRestaurant.LocationDetails.zipCode,
+            Headline: newRestaurant.Details.headline,
+            Description: newRestaurant.Details.description,
+            RestaurantType: newRestaurant.Details.RestaurantType,
+            Photos: newRestaurant.Photos.photos,
+           
             Ownername: userSession.FirstName + " " + userSession.LastName,
             OwnerId: userSession.ProfileId
         });
@@ -90,17 +76,17 @@ function handle_request(message, callback){
       
 
 
-        property.save().then((doc) => {
+        Restaurant.save().then((doc) => {
 
-            console.log("Property details saved successfully.", doc);
+            console.log("Restaurant details saved successfully.", doc);
             callback(null, doc);
 
         }, (err) => {
-            console.log("Unable to property details.", err);
+            console.log("Unable to Restaurant details.", err);
             callback(err, null);
         });
 
-        /**Creating property object to add to Property details collection */
+        /**Creating Restaurant object to add to Restaurant details collection */
 
 }
 
