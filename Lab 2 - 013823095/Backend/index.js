@@ -20,7 +20,7 @@ app.use(cors({ origin: 'http://ec2-18-223-153-77.us-east-2.compute.amazonaws.com
 //set up session variable
 
 app.use(session({
-    secret: 'cmpe273-homeaway-app',
+    secret: 'cmpe273-grubhub-app',
     resave: false,
     saveUninitialized: false,
     duration: 60 * 60 * 100,
