@@ -1,7 +1,7 @@
 # grubhub_graphql
 
-### If this is your first time to run the code
-#### 1. npm i
+### Install node modules by running the below command after going to the folder where package.json is located
+#### 1. npm install
 #### 2. npm start
-#### 3. go to the backend folder and run node server.js
-#### 4. go to the frontend and run npm start
+#### 3. Navigate to backend folder and run node server.js
+#### 4. Navigate to frontend and run npm start
