@@ -14,10 +14,10 @@ async function handle_request(message, callback){
     });
 
     await booking.save().then((doc) => {
-        console.log("Booking details saved successfully.", doc);        
+        console.log("item details saved successfully.", doc);        
     },
         (err) => {
-            console.log("Unable to save booking details.", err);
+            console.log("Unable to save item details.", err);
             callback(err, null);
         });
 
